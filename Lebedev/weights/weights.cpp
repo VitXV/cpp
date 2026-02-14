@@ -4,7 +4,7 @@ using namespace std;
 
 int main()
 {
-    setlocale(LC_ALL, "Russian");
+    setlocale(LC_ALL,"Russian");
 
     int W[] = { 100,50,20,10,5,2,1 };
     int n = sizeof(W) / 4;
@@ -20,7 +20,7 @@ int main()
     int massa = -1;
     while (massa <= 0)
     {
-        cout << "Ââåäèòå ìàññó, êîòîðóþ, íåîáõîäèìî âçâåñèòü: ";
+        cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð¼Ð°ÑÑÑƒ, ÐºÐ¾Ñ‚Ð¾Ñ€ÑƒÑŽ, Ð½ÐµÐ¾Ð±Ñ…Ð¾Ð´Ð¸Ð¼Ð¾ Ð²Ð·Ð²ÐµÑÐ¸Ñ‚ÑŒ: ";
         cin >> massa;
     }
 
@@ -38,9 +38,10 @@ int main()
     for (int i = 0; i < n;i++)
     {
         if (weights[i] > 0)
-            cout << weights[i] << " ãèðÿ âåñîì " << W[i] << endl;
+            cout << weights[i] << " Ð³Ð¸Ñ€Ñ Ð²ÐµÑÐ¾Ð¼ " << W[i] << endl;
     }
 
     delete[] weights;
     return 0;
 }
+
