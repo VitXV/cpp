@@ -49,6 +49,12 @@ int main()
 	cout << "Enter c: ";
 	cin >> c;
 
+	if (a == 0)
+	{
+		cout << "x = " << Rational(-c, b);
+		return 0;
+	}
+
 	Rational D;
 	D = b * b - (Rational)4 * a * c;
 
