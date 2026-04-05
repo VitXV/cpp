@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <ctime>
 #include "DateTime.h"
 using namespace std;
 
@@ -7,13 +8,23 @@ class Exception {};
 
 int mdays[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
 
+bool DateTime::isLeap()
+{
+	if (year % 400 == 0)
+		return true;
+	if (year % 100 == 0)
+		return false;
+	if (year % 4 == 0)
+		return true;
+	return false;
+}
 void DateTime::isCorrect()
 {
 	if (year < 0)
 		throw Exception();
 	if (month < 1 || month > 12)
 		throw Exception();
-	if (year % 4 == 0 && month == 2)
+	if (isLeap() && month == 2)
 	{
 		if (day < 1 || day>29)
 			throw Exception();
@@ -21,10 +32,16 @@ void DateTime::isCorrect()
 	}
 	if (day < 1 || day > mdays[month-1])
 		throw Exception();
+	if (hour < 0 || hour > 23)
+		throw Exception();
+	if (minute < 0 || minute > 59)
+		throw Exception();
+	if (second < 0 || second > 59)
+		throw Exception();
 }
 void DateTime::CheckNewValue()
 {
-	if (year % 4 == 0 && month == 2)
+	if (isLeap() && month == 2)
 	{
 		if (day > 29)
 		{
@@ -56,40 +73,247 @@ int DateTime::DayOfTheWeek()
 	return Julian() % 7;
 }
 
-DateTime::DateTime() {
+DateTime DateTime::Easter()
+{
+	int a = year % 19;
+	int b = year % 4;
+	int c = year % 7;
+	int d = (19*a + 15) % 30;
+	int e = (2*b + 4*c + 6*d + 6) % 7;
+	int f = d + e;
+	if (f <= 26)
+	{
+		DateTime EasterDay(year, 4, 4 + f);
+		return EasterDay;
+	}
+	else
+	{
+		DateTime EasterDay(year, 5, f-26);
+		return EasterDay;
+	}
+}
+
+void DateTime::now()
+{
+	time_t t = time(nullptr);
+	tm timeinfo;
+	localtime_s(&timeinfo, &t);
+
+	year = timeinfo.tm_year + 1900;
+	month = timeinfo.tm_mon + 1;
+	day = timeinfo.tm_mday;
+	hour = timeinfo.tm_hour;
+	minute = timeinfo.tm_min;
+	second = timeinfo.tm_sec;
+}
+
+DateTime::DateTime()
+{
 	year = 1970;
 	month = 1;
 	day = 1;
 }
-DateTime::DateTime(int y) {
+DateTime::DateTime(int y)
+{
 	year = y;
 	month = 1;
 	day = 1;
 	isCorrect();
 }
-DateTime::DateTime(int y, int m) {
+DateTime::DateTime(int y, int M)
+{
 	year = y;
-	month = m;
+	month = M;
 	day = 1;
 	isCorrect();
 }
-DateTime::DateTime(int y, int m, int d) {
+DateTime::DateTime(int y, int M, int d)
+{
 	year = y;
-	month = m;
+	month = M;
 	day = d;
+	isCorrect();
+}
+DateTime::DateTime(int y, int M, int d, int h)
+{
+	year = y;
+	month = M;
+	day = d;
+	hour = h;
+	isCorrect();
+}
+DateTime::DateTime(int y, int M, int d, int h, int m)
+{
+	year = y;
+	month = M;
+	day = d;
+	hour = h;
+	minute = m;
+	isCorrect();
+}
+DateTime::DateTime(int y, int M, int d, int h, int m, int s)
+{
+	year = y;
+	month = M;
+	day = d;
+	hour = h;
+	minute = m;
+	second = s;
 	isCorrect();
 }
 
 istream& operator >> (istream& in, DateTime& dt)
 {
-	in >> dt.year >> dt.month >> dt.day;
+	char ENTER[20];
+	in >> ENTER;
+
+	int V=0;
+	for (int i = 0; i < 20; i++)
+	{
+		if (ENTER[i] == 'T' || ENTER[i] == 't')
+		{
+			V = 1;
+			break;
+		}
+		if (ENTER[i] == ':')
+		{
+			V = 2;
+			break;
+		}
+	}
+
+	int i = 0;
+	switch (V)
+	{
+		case 0:
+		{
+			dt.year = 0, dt.month = 0, dt.day = 0;
+
+			for (; ENTER[i] != '-'; i++)
+			{
+				if (ENTER[i] < 48 || ENTER[i]>57)
+					throw Exception();
+				dt.year *= 10;
+				dt.year += (int)ENTER[i]-48;
+			}
+			i++;
+			for (; ENTER[i] != '-'; i++)
+			{
+				if (ENTER[i] < 48 || ENTER[i]>57)
+					throw Exception();
+				dt.month *= 10;
+				dt.month += (int)ENTER[i]-48;
+			}
+			i++;
+			for (; ENTER[i] != '\0'; i++)
+			{
+				if (ENTER[i] < 48 || ENTER[i]>57)
+					throw Exception();
+				dt.day *= 10;
+				dt.day += (int)ENTER[i]-48;
+			}
+			break;
+		}
+		case 1:
+		{
+			dt.year = 0, dt.month = 0, dt.day = 0;
+			dt.hour = 0, dt.minute = 0, dt.second = 0;
+
+			for (; ENTER[i] != '-'; i++)
+			{
+				if (ENTER[i] < 48 || ENTER[i]>57)
+					throw Exception();
+				dt.year *= 10;
+				dt.year += (int)ENTER[i] - 48;
+			}
+			i++;
+			for (; ENTER[i] != '-'; i++)
+			{
+				if (ENTER[i] < 48 || ENTER[i]>57)
+					throw Exception();
+				dt.month *= 10;
+				dt.month += (int)ENTER[i] - 48;
+			}
+			i++;
+			for (; ENTER[i] != 'T' && ENTER[i] != 't'; i++)
+			{
+				if (ENTER[i] < 48 || ENTER[i]>57)
+					throw Exception();
+				dt.day *= 10;
+				dt.day += (int)ENTER[i] - 48;
+			}
+			i++;
+			for (; ENTER[i] != ':'; i++)
+			{
+				if (ENTER[i] < 48 || ENTER[i]>57)
+					throw Exception();
+				dt.hour *= 10;
+				dt.hour += (int)ENTER[i] - 48;
+			}
+			i++;
+			for (; ENTER[i] != ':'; i++)
+			{
+				if (ENTER[i] < 48 || ENTER[i]>57)
+					throw Exception();
+				dt.minute *= 10;
+				dt.minute += (int)ENTER[i] - 48;
+			}
+			i++;
+			for (; ENTER[i] != '\0'; i++)
+			{
+				if (ENTER[i] < 48 || ENTER[i]>57)
+					throw Exception();
+				dt.second *= 10;
+				dt.second += (int)ENTER[i] - 48;
+			}
+			break;
+		}
+		case 2:
+		{
+			dt.now();
+
+			for (; ENTER[i] != ':'; i++)
+			{
+				if (ENTER[i] < 48 || ENTER[i]>57)
+					throw Exception();
+				dt.hour *= 10;
+				dt.hour += (int)ENTER[i] - 48;
+			}
+			i++;
+			for (; ENTER[i] != ':'; i++)
+			{
+				if (ENTER[i] < 48 || ENTER[i]>57)
+					throw Exception();
+				dt.minute *= 10;
+				dt.minute += (int)ENTER[i] - 48;
+			}
+			i++;
+			for (; ENTER[i] != '\0'; i++)
+			{
+				if (ENTER[i] < 48 || ENTER[i]>57)
+					throw Exception();
+				dt.second *= 10;
+				dt.second += (int)ENTER[i] - 48;
+			}
+			break;
+		}
+	}
 	dt.isCorrect();
 	return in;
 }
 ostream& operator << (ostream& out, const DateTime& dt)
 {
-	out << dt.year << "-" << setfill('0') << setw(2) << dt.month << "-" << setfill('0') << setw(2) << dt.day;
-	return out;
+	if (dt.hour == 0 && dt.minute == 0 && dt.second == 0)
+	{
+		out << dt.year << "-" << setfill('0') << setw(2) << dt.month << "-" << setfill('0') << setw(2) << dt.day;
+		return out;
+	}
+	else
+	{
+		out << dt.year << "-" << setfill('0') << setw(2) << dt.month << "-" << setfill('0') << setw(2) << dt.day << " "
+			<< setfill('0') << setw(2) << dt.hour << ":" << setfill('0') << setw(2) << dt.minute << ":" << setfill('0') << setw(2) << dt.second;
+		return out;
+	}
 }
 
 int DateTime::operator - (const DateTime& dt) const
@@ -98,7 +322,7 @@ int DateTime::operator - (const DateTime& dt) const
 	if (*this == dt)
 		return 0;
 
-	// ÐŸÐ¾Ð´Ñ€Ð°Ð·ÑƒÐ¼ÐµÐ²Ð°ÐµÑ‚ÑÑ, Ñ‡Ñ‚Ð¾ Ð²Ñ‹Ñ‡Ð¸Ñ‚Ð°Ñ‚ÑŒ Ð±ÑƒÐ´ÑƒÑ‚ Ð¼ÐµÐ½ÑŒÑˆÐµÐµ Ð¾Ñ‚ Ð±Ð¾Ð»ÑŒÑˆÐµÐ³Ð¾, Ð½Ð¾ ÐµÑÐ»Ð¸ ÑÑ‚Ð¾ Ð½Ðµ Ñ‚Ð°Ðº, Ñ‚Ð¾ Ð¿Ñ€Ð¸Ñ…Ð¾Ð´Ð¸Ñ‚ÑÑ Ð¼ÐµÐ½ÑÑ‚ÑŒ Ð¿ÐµÑ€ÐµÐ¼ÐµÐ½Ð½Ñ‹Ðµ Ð¼ÐµÑÑ‚Ð°Ð¼Ð¸
+	// Ïîäðàçóìåâàåòñÿ, ÷òî âû÷èòàòü áóäóò ìåíüøåå îò áîëüøåãî, íî åñëè ýòî íå òàê, òî ïðèõîäèòñÿ ìåíÿòü ïåðåìåííûå ìåñòàìè
 	DateTime cp1 = dt; 
 	DateTime cp2 = *this;
 	if (*this < dt)
@@ -140,7 +364,7 @@ DateTime DateTime::operator ++(int)
 
 bool DateTime::operator == (const DateTime& dt) const
 {
-	return (year == dt.year) && (month == dt.month) && (day == dt.day);
+	return (year == dt.year) && (month == dt.month) && (day == dt.day) && (hour == dt.hour) && (minute == dt.minute) && (second == dt.second);
 }
 bool DateTime::operator != (const DateTime& dt) const
 {
@@ -153,6 +377,12 @@ bool DateTime::operator > (const DateTime & dt) const
 	else if (year == dt.year && month > dt.month)
 		return true;
 	else if (year == dt.year && month == dt.month && day > dt.day)
+		return true;
+	else if (year == dt.year && month == dt.month && day == dt.day && hour > dt.hour)
+		return true;
+	else if (year == dt.year && month == dt.month && day == dt.day && hour == dt.hour && minute > dt.minute)
+		return true;
+	else if (year == dt.year && month == dt.month && day == dt.day && hour == dt.hour && minute == dt.minute && second > dt.second)
 		return true;
 	else
 		return false;
@@ -168,4 +398,54 @@ bool DateTime::operator < (const DateTime & dt) const
 bool DateTime::operator <= (const DateTime & dt) const
 {
 	return !(*this < dt);
+}
+
+void DateTime::setYear(int y)
+{
+	year = y;
+}
+void DateTime::setMonth(int M)
+{
+	month = M;
+}
+void DateTime::setDay(int d)
+{
+	day = d;
+}
+void DateTime::setHour(int h)
+{
+	hour = h;
+}
+void DateTime::setMinute(int m)
+{
+	minute = m;
+}
+void DateTime::setSecond(int s)
+{
+	second = s;
+}
+
+int DateTime::getYear()
+{
+	return year;
+}
+int DateTime::getMonth()
+{
+	return month;
+}
+int DateTime::getDay()
+{
+	return day;
+}
+int DateTime::getHour()
+{
+	return hour;
+}
+int DateTime::getMinute()
+{
+	return minute;
+}
+int DateTime::getSecond()
+{
+	return second;
 }
