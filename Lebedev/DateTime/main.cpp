@@ -94,7 +94,7 @@ int main() {
 	cout << endl << "Easter 2026: " << estr.Easter();
 
 
-	//ïğèëîæåíèå 1
+	//Ğ¿Ñ€Ğ¸Ğ»Ğ¾Ğ¶ĞµĞ½Ğ¸Ğµ 1
 	/*
 	DateTime datas[26] =
 	{
