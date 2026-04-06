@@ -2,6 +2,8 @@
 #include <iostream>
 using namespace std;
 
+class Exception {};
+
 class DateTime {
 	int year, month, day;
 	int hour = 0, minute = 0, second = 0;

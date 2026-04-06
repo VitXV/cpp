@@ -4,8 +4,6 @@
 #include "DateTime.h"
 using namespace std;
 
-class Exception {};
-
 int mdays[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
 
 bool DateTime::isLeap()
@@ -271,6 +269,7 @@ istream& operator >> (istream& in, DateTime& dt)
 		case 2:
 		{
 			dt.now();
+			dt.hour = 0, dt.minute = 0, dt.second = 0;
 
 			for (; ENTER[i] != ':'; i++)
 			{
@@ -403,26 +402,32 @@ bool DateTime::operator <= (const DateTime & dt) const
 void DateTime::setYear(int y)
 {
 	year = y;
+	isCorrect();
 }
 void DateTime::setMonth(int M)
 {
 	month = M;
+	isCorrect();
 }
 void DateTime::setDay(int d)
 {
 	day = d;
+	isCorrect();
 }
 void DateTime::setHour(int h)
 {
 	hour = h;
+	isCorrect();
 }
 void DateTime::setMinute(int m)
 {
 	minute = m;
+	isCorrect();
 }
 void DateTime::setSecond(int s)
 {
 	second = s;
+	isCorrect();
 }
 
 int DateTime::getYear()
