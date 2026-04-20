@@ -187,7 +187,7 @@ istream& operator >> (istream& in, DateTime& dt)
 		{
 			dt.year = 0, dt.month = 0, dt.day = 0;
 
-			for (; ENTER[i] != '-'; i++)
+			for (; ENTER[i] != '-' && ENTER[i] != '.'; i++)
 			{
 				if (ENTER[i] < 48 || ENTER[i]>57)
 					throw Exception();
@@ -195,7 +195,7 @@ istream& operator >> (istream& in, DateTime& dt)
 				dt.year += (int)ENTER[i]-48;
 			}
 			i++;
-			for (; ENTER[i] != '-'; i++)
+			for (; ENTER[i] != '-' && ENTER[i] != '.'; i++)
 			{
 				if (ENTER[i] < 48 || ENTER[i]>57)
 					throw Exception();
@@ -217,7 +217,7 @@ istream& operator >> (istream& in, DateTime& dt)
 			dt.year = 0, dt.month = 0, dt.day = 0;
 			dt.hour = 0, dt.minute = 0, dt.second = 0;
 
-			for (; ENTER[i] != '-'; i++)
+			for (; ENTER[i] != '-' && ENTER[i] != '.'; i++)
 			{
 				if (ENTER[i] < 48 || ENTER[i]>57)
 					throw Exception();
@@ -225,7 +225,7 @@ istream& operator >> (istream& in, DateTime& dt)
 				dt.year += (int)ENTER[i] - 48;
 			}
 			i++;
-			for (; ENTER[i] != '-'; i++)
+			for (; ENTER[i] != '-' && ENTER[i] != '.'; i++)
 			{
 				if (ENTER[i] < 48 || ENTER[i]>57)
 					throw Exception();
@@ -453,4 +453,21 @@ int DateTime::getMinute()
 int DateTime::getSecond()
 {
 	return second;
+}
+
+int DateTime::DateToInt()
+{
+	int d = 0;
+	d += year * 10000;
+	d += month * 100;
+	d += day;
+	return d;
+}
+int DateTime::TimeToInt()
+{
+	int t = 0;
+	t += hour * 10000;
+	t += minute * 100;
+	t += second;
+	return t;
 }
