@@ -430,27 +430,27 @@ void DateTime::setSecond(int s)
 	isCorrect();
 }
 
-int DateTime::getYear()
+int DateTime::getYear() const
 {
 	return year;
 }
-int DateTime::getMonth()
+int DateTime::getMonth() const
 {
 	return month;
 }
-int DateTime::getDay()
+int DateTime::getDay() const
 {
 	return day;
 }
-int DateTime::getHour()
+int DateTime::getHour() const
 {
 	return hour;
 }
-int DateTime::getMinute()
+int DateTime::getMinute() const
 {
 	return minute;
 }
-int DateTime::getSecond()
+int DateTime::getSecond() const
 {
 	return second;
 }
@@ -470,4 +470,37 @@ int DateTime::TimeToInt()
 	t += minute * 100;
 	t += second;
 	return t;
+}
+
+// Всё что дальше я подсмотрел в интернете, чтобы можно было проще приводить к нужному формату
+
+DateTimeReversedOutput ReversedOutput(const DateTime& dt)
+{
+	return { dt };
+}
+
+ostream& operator << (ostream& out, const DateTimeReversedOutput& r)
+{
+	out << setfill('0') << setw(2) << r.dt.getDay() << "-" << setfill('0') << setw(2) << r.dt.getMonth() << "-" << r.dt.getYear();
+	return out;
+}
+
+DateTimeReversedInput ReversedInput(DateTime& dt)
+{
+	return { dt };
+}
+
+istream& operator >> (istream& in, const DateTimeReversedInput& r)
+{
+	int d, m, y;
+	char c1, c2;
+
+	if (!(in >> d >> c1 >> m >> c2 >> y))
+		throw Exception();
+
+	if (c1 != '-' && c1 != '.' || c2 != '-' && c2 != '.')
+		throw Exception();
+
+	r.dt = DateTime(y, m, d);
+	return in;
 }

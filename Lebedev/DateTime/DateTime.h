@@ -22,6 +22,8 @@ public:
 	friend istream& operator >> (istream& in, DateTime& dt);
 	friend ostream& operator << (ostream& out, const DateTime& dt);
 
+	friend void ReversedDataOut(ostream& out, const DateTime& dt);
+
 	int operator - (const DateTime& dt) const;
 	DateTime operator + (const int& days);
 
@@ -49,10 +51,31 @@ public:
 	void setMinute(int m);
 	void setSecond(int s);
 
-	int getYear();
-	int getMonth();
-	int getDay();
-	int getHour();
-	int getMinute();
-	int getSecond();
+	int getYear() const;
+	int getMonth() const;
+	int getDay() const;
+	int getHour() const;
+	int getMinute() const;
+	int getSecond() const;
+
+	int DateToInt();
+	int TimeToInt();
 };
+
+// Всё что дальше я подсмотрел в интернете, чтобы можно было проще приводить к нужному формату
+
+struct DateTimeReversedOutput
+{
+	const DateTime& dt;
+};
+
+DateTimeReversedOutput ReversedOutput(const DateTime& dt);
+ostream& operator << (ostream& out, const DateTimeReversedOutput& r);
+
+struct DateTimeReversedInput
+{
+	DateTime& dt;
+};
+
+DateTimeReversedInput ReversedInput(DateTime& dt);
+istream& operator >> (istream& in, const DateTimeReversedInput& r);

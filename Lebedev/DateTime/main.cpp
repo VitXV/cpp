@@ -173,5 +173,15 @@ int main() {
 
 	cout << endl;
 
+	/*
+    DateTime test(1995, 12, 12);
+    cout << ReversedOutput(test)<<endl;
+
+    DateTime testInput;
+    cin >> ReversedInput(testInput); 
+
+    cout << endl << testInput;
+	*/
+
 	return 0;
 }
