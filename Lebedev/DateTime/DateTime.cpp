@@ -104,6 +104,12 @@ void DateTime::now()
 	minute = timeinfo.tm_min;
 	second = timeinfo.tm_sec;
 }
+void DateTime::unix()
+{
+	year = 1970;
+	month = 1;
+	day = 1;
+}
 
 DateTime::DateTime()
 {
@@ -215,7 +221,6 @@ istream& operator >> (istream& in, DateTime& dt)
 		case 1:
 		{
 			dt.year = 0, dt.month = 0, dt.day = 0;
-			dt.hour = 0, dt.minute = 0, dt.second = 0;
 
 			for (; ENTER[i] != '-' && ENTER[i] != '.'; i++)
 			{
@@ -268,8 +273,7 @@ istream& operator >> (istream& in, DateTime& dt)
 		}
 		case 2:
 		{
-			dt.now();
-			dt.hour = 0, dt.minute = 0, dt.second = 0;
+			dt.unix();
 
 			for (; ENTER[i] != ':'; i++)
 			{
@@ -472,7 +476,26 @@ int DateTime::TimeToInt()
 	return t;
 }
 
-// Всё что дальше я подсмотрел в интернете, чтобы можно было проще приводить к нужному формату
+DateTime DateTime::IntToDate(int dateInt)
+{
+	if (dateInt < 0)
+		throw Exception();
+	int y = dateInt / 10000;
+	int m = (dateInt % 10000) / 100;
+	int d = dateInt % 100;
+
+	return DateTime(y, m, d);
+}
+DateTime DateTime::IntToTime(int timeInt)
+{
+	if (timeInt < 0)
+		throw Exception();
+	int h = timeInt / 10000;
+	int m = (timeInt % 10000) / 100;
+	int s = timeInt % 100;
+
+	return DateTime(1970, 1, 1, h, m, s);
+}
 
 DateTimeReversedOutput ReversedOutput(const DateTime& dt)
 {
@@ -503,4 +526,14 @@ istream& operator >> (istream& in, const DateTimeReversedInput& r)
 
 	r.dt = DateTime(y, m, d);
 	return in;
+}
+
+DateTimeOnlyTime Time(const DateTime& dt)
+{
+	return { dt };
+}
+
+ostream& operator << (ostream& out, const DateTimeOnlyTime& t) {
+	out << setfill('0') << setw(2) << t.dt.getHour() << ":"<< setfill('0') << setw(2) << t.dt.getMinute() << ":" << setfill('0') << setw(2) << t.dt.getSecond();
+	return out;
 }

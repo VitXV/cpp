@@ -22,8 +22,6 @@ public:
 	friend istream& operator >> (istream& in, DateTime& dt);
 	friend ostream& operator << (ostream& out, const DateTime& dt);
 
-	friend void ReversedDataOut(ostream& out, const DateTime& dt);
-
 	int operator - (const DateTime& dt) const;
 	DateTime operator + (const int& days);
 
@@ -43,6 +41,7 @@ public:
 	DateTime Easter();
 	 
 	void now();
+	void unix();
 
 	void setYear(int y);
 	void setMonth(int M);
@@ -60,9 +59,9 @@ public:
 
 	int DateToInt();
 	int TimeToInt();
+	DateTime IntToDate(int dateInt);
+	DateTime IntToTime(int timeInt);
 };
-
-// Всё что дальше я подсмотрел в интернете, чтобы можно было проще приводить к нужному формату
 
 struct DateTimeReversedOutput
 {
@@ -79,3 +78,11 @@ struct DateTimeReversedInput
 
 DateTimeReversedInput ReversedInput(DateTime& dt);
 istream& operator >> (istream& in, const DateTimeReversedInput& r);
+
+struct DateTimeOnlyTime
+{
+	const DateTime& dt;
+};
+
+DateTimeOnlyTime Time(const DateTime& dt);
+ostream& operator << (ostream& out, const DateTimeOnlyTime& t);
