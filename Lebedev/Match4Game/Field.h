@@ -15,8 +15,6 @@ class Field
     Cell cells[FIELD_WIDTH][FIELD_HEIGHT];
     bool isRedTurn;
     Cell winner;
-
-    //void clear(State turn);
  public:
     Field(bool isRedFirst);
     void clear(bool isRedFirst);
@@ -29,7 +27,4 @@ class Field
 
     //bool isWon(bool isRed) const;
     //Cell getCell(int i, int j) const;
-
-    //Field(int h, int w, Cell turn = RED);
-
 };
