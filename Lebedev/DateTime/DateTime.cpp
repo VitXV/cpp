@@ -346,7 +346,7 @@ int DateTime::operator - (const DateTime& dt) const
 		return 0;
 
 	// Подразумевается, что вычитать будут меньшее от большего, но если это не так, то приходится менять переменные местами
-	DateTime cp1 = dt; 
+	DateTime cp1 = dt;
 	DateTime cp2 = *this;
 	if (*this < dt)
 	{
@@ -531,6 +531,23 @@ DateTime DateTime::IntToTime(int timeInt)
 	int s = timeInt % 100;
 
 	return DateTime(1970, 1, 1, h, m, s);
+}
+
+DateTime DateTime::SetIntToDateTime(int dateInt, int timeInt)
+{
+	if (dateInt < 0)
+		throw Exception();
+	int year = dateInt / 10000;
+	int month = (dateInt % 10000) / 100;
+	int day = dateInt % 100;
+
+	if (timeInt < 0)
+		throw Exception();
+	int h = timeInt / 10000;
+	int m = (timeInt % 10000) / 100;
+	int s = timeInt % 100;
+
+	return DateTime(year, month, day, h, m, s);
 }
 
 DateTimeReversedOutput ReversedOutput(const DateTime& dt)

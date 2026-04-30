@@ -64,6 +64,7 @@ public:
 	int TimeToInt();
 	DateTime IntToDate(int dateInt);
 	DateTime IntToTime(int timeInt);
+	DateTime SetIntToDateTime(int dateInt, int timeInt);
 };
 
 struct DateTimeReversedOutput
