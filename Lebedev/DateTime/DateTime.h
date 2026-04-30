@@ -23,7 +23,8 @@ public:
 	friend ostream& operator << (ostream& out, const DateTime& dt);
 
 	int operator - (const DateTime& dt) const;
-	DateTime operator + (const int& days);
+	DateTime operator + (const int& days) const;
+	DateTime operator - (const int& days) const;
 
 	DateTime operator ++();
 	DateTime operator ++(int);
@@ -39,7 +40,7 @@ public:
 	int DayOfTheWeek();
 
 	DateTime Easter();
-	 
+
 	void now();
 	void unix();
 
@@ -56,6 +57,8 @@ public:
 	int getHour() const;
 	int getMinute() const;
 	int getSecond() const;
+
+	int TimeToSeconds() const;
 
 	int DateToInt();
 	int TimeToInt();
