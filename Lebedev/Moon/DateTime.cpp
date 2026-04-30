@@ -2,7 +2,6 @@
 #include <iomanip>
 #include <ctime>
 #include "DateTime.h"
-using namespace std;
 
 int mdays[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
 
@@ -47,7 +46,7 @@ void DateTime::CheckNewValue()
 			day = 1;
 		}
 	}
-	if (day > mdays[month-1])
+	else if (day > mdays[month-1])
 	{
 		month += 1;
 		day = 1;
@@ -57,6 +56,27 @@ void DateTime::CheckNewValue()
 		year += 1;
 		month = 1;
 	}
+
+	if (isLeap() && month == 3)
+	{
+		if (day < 1)
+		{
+			month -= 1;
+			day = 29;
+		}
+	}
+	else if (day < 1)
+	{
+		month -= 1;
+		day = mdays[(month - 1 +12)%12];
+	}
+	if (month < 1)
+	{
+		year -= 1;
+		month = 12;
+	}
+	if (year < 0)
+		throw Exception();
 }
 int DateTime::Julian()
 {
@@ -326,7 +346,7 @@ int DateTime::operator - (const DateTime& dt) const
 		return 0;
 
 	// Подразумевается, что вычитать будут меньшее от большего, но если это не так, то приходится менять переменные местами
-	DateTime cp1 = dt;
+	DateTime cp1 = dt; 
 	DateTime cp2 = *this;
 	if (*this < dt)
 	{
@@ -341,14 +361,25 @@ int DateTime::operator - (const DateTime& dt) const
 	}
 	return days;
 }
-DateTime DateTime::operator + (const int& days)
+DateTime DateTime::operator + (const int& days) const
 {
+	DateTime dt = *this;
 	for (int k = days; k > 0; k--)
 	{
-		day++;
-		CheckNewValue();
+		dt.day++;
+		dt.CheckNewValue();
 	}
-	return *this;
+	return dt;
+}
+DateTime DateTime::operator - (const int& days) const
+{
+	DateTime dt = *this;
+	for (int k = days; k > 0; k--)
+	{
+		dt.day--;
+		dt.CheckNewValue();
+	}
+	return dt;
 }
 
 DateTime DateTime::operator ++()
@@ -457,6 +488,11 @@ int DateTime::getMinute() const
 int DateTime::getSecond() const
 {
 	return second;
+}
+
+int DateTime::TimeToSeconds() const
+{
+	return hour*3600 + minute*60 + second;
 }
 
 int DateTime::DateToInt()
