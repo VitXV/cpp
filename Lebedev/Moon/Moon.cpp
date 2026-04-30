@@ -31,7 +31,7 @@ int main()
         }
     }
 
-    auto start = chrono::high_resolution_clock::now();
+    auto startTIMER = chrono::high_resolution_clock::now();
 
     // С 2007-го года до 2008-го меняется структура данных
     // было YMD	HMS	T	R	El	Az	FI	LG
@@ -58,13 +58,15 @@ int main()
     int time;
     double El;
 
-    double prevEl=0;
+    double prevEl= 0;
     int mx = -1000;
 
     // Переменные для вывода результата
     DateTime moonrise;
     DateTime culmination;
     DateTime moonset;
+
+    bool riseFound = false;
 
     int compare1;
     int compare2;
@@ -78,7 +80,7 @@ int main()
             file >> skip >> compare2 >> skip >> skip >> skip >> skip >> skip >> skip;
 
             CompareResult = DateTime().IntToTime(compare2).TimeToSeconds() - DateTime().IntToTime(compare1).TimeToSeconds();
-            CompareResult = 24 * 3600 / CompareResult; // Количество строк для одного дня 
+            CompareResult = 24 * 3600 / CompareResult; // Количество строк для одного дня
             //cout << "CompareResult: " << CompareResult;
 
             file.seekg(0);
@@ -102,7 +104,7 @@ int main()
             */
 
             DateTime start(dt.getYear(), 1, 1);
-            int howMuch = dt - start - 1; // сколько дней мне нужно пропустить, чтобы перейти ближе к необходимому
+            int howMuch = dt - start; // сколько дней мне нужно пропустить, чтобы перейти ближе к необходимому
             if (howMuch <= 0)
                 howMuch = 0;
             //cout << endl << "howMuch: " << howMuch;
@@ -110,29 +112,58 @@ int main()
             // Я хочу пропустить некоторое количество символов
             // (Кол-во_символов_в_строке * Кол-во_строк_в_одном_дне) * кол-во дней
 
+            //2017-й год проблемный, и я не понял почему
+            // поэтому пока что он не работает
+            if (dt.getYear() == 2017)
+                return 1;
+
+            // примерно приземляемся куда надо
             unsigned long long int totalSkip = (unsigned long long int)CompareResult * howMuch * CHARS_PER_LINE;
             file.seekg(totalSkip, ios::cur);
-            file.clear();
             for (char c; file.get(c) && c != '\n';);
+
+            if (howMuch != 0 and !(file.eof()))
+            {
+                file >> date >> time >> skip >> skip >> El >> skip >> skip >> skip;
+                // докручиваем дни
+                for (int i = 0; i < dt - DateTime().IntToDate(date) - 1; i++)
+                    file.seekg(totalSkip / howMuch, ios::cur);
+                for (char c; file.get(c) && c != '\n';);
+                file >> date >> time >> skip >> skip >> El >> skip >> skip >> skip;
+
+                // докручиваем часы
+
+                for (int i = 0; i < 23 - DateTime().IntToTime(time).getHour(); i++)
+                    file.seekg((totalSkip / 24) / howMuch, ios::cur);
+                for (char c; file.get(c) && c != '\n';);
+            }
+
+
+            //file >> date >> time >> skip >> skip >> El >> skip >> skip >> skip;
+            //cout << endl <<  date << " " << time;
 
             while (file >> date >> time >> skip >> skip >> El >> skip >> skip >> skip) // читаю файл по словам
             {
                 //cout << endl << date << " " << time;
-                if (date == dt.DateToInt())
+                if (date >= dt.DateToInt())
                 {
-                    if (prevEl < 0 && El >= 0)
-                        moonrise = moonrise.IntToTime(time);
-                    if (prevEl > 0 && El <= 0)
-                        moonset = moonset.IntToTime(time);
-                    if (El > mx)
+                    if (date == dt.DateToInt() && prevEl < 0 && El >= 0)
+                    {
+                        moonrise = DateTime().SetIntToDateTime(date, time);
+                        riseFound = true;
+                    }
+                    if (riseFound && date == dt.DateToInt() && El > mx)
                     {
                         mx = El;
-                        culmination = culmination.IntToTime(time);
+                        culmination = DateTime().SetIntToDateTime(date, time);
                     }
-                }
-                prevEl = El;
+                    if (riseFound && prevEl > 0 && El <= 0)
+                        moonset = DateTime().SetIntToDateTime(date, time);
 
-                if (date == (dt + 1).DateToInt())
+                    prevEl = El;
+                }
+
+                if (date >= dt.DateToInt() + 1 && time > 120000)
                 {
                     file.close();
                     break;
@@ -146,7 +177,7 @@ int main()
             file >> skip >> compare2 >> skip >> skip >> skip >> skip >> skip;
 
             CompareResult = DateTime().IntToTime(compare2).TimeToSeconds() - DateTime().IntToTime(compare1).TimeToSeconds();
-            CompareResult = 24 * 3600 / CompareResult; // Количество строк для одного дня 
+            CompareResult = 24 * 3600 / CompareResult; // Количество строк для одного дня
             //cout << "CompareResult: " << CompareResult;
 
             file.seekg(0);
@@ -176,26 +207,45 @@ int main()
 
             unsigned long long int totalSkip = (unsigned long long int)CompareResult * howMuch * CHARS_PER_LINE;
             file.seekg(totalSkip, ios::cur);
-            file.clear();
             for (char c; file.get(c) && c != '\n';);
+
+            if (howMuch != 0 and !(file.eof()))
+            {
+                file >> date >> time >> skip >> skip >> El >> skip >> skip >> skip;
+                // докручиваем дни
+                for (int i = 0; i < dt - DateTime().IntToDate(date) - 1; i++)
+                    file.seekg(totalSkip / howMuch, ios::cur);
+                for (char c; file.get(c) && c != '\n';);
+                file >> date >> time >> skip >> skip >> El >> skip >> skip >> skip;
+
+                // докручиваем часы
+
+                for (int i = 0; i < 23 - DateTime().IntToTime(time).getHour(); i++)
+                    file.seekg((totalSkip / 24) / howMuch, ios::cur);
+                for (char c; file.get(c) && c != '\n';);
+            }
 
             while (file >> date >> time >> skip >> El >> skip >> skip >> skip) // читаю файл по словам
             {
-                if (date == dt.DateToInt())
+                if (date >= dt.DateToInt())
                 {
-                    if (prevEl < 0 && El >= 0)
-                        moonrise = moonrise.IntToTime(time);
-                    if (prevEl > 0 && El <= 0)
-                        moonset = moonset.IntToTime(time);
-                    if (El > mx)
+                    if (date == dt.DateToInt() && prevEl < 0 && El >= 0)
+                    {
+                        moonrise = DateTime().SetIntToDateTime(date, time);
+                        riseFound = true;
+                    }
+                    if (riseFound && date == dt.DateToInt() && El > mx)
                     {
                         mx = El;
-                        culmination = culmination.IntToTime(time);
+                        culmination = DateTime().SetIntToDateTime(date, time);
                     }
-                }
-                prevEl = El;
+                    if (riseFound && prevEl > 0 && El <= 0)
+                        moonset = DateTime().SetIntToDateTime(date, time);
 
-                if (date == (dt + 1).DateToInt())
+                    prevEl = El;
+                }
+
+                if (date >= dt.DateToInt() + 1 && time > 120000)
                 {
                     file.close();
                     break;
@@ -204,13 +254,13 @@ int main()
             break;
         }
     }
-    auto end = chrono::high_resolution_clock::now();
-    chrono::duration<double> diff = end - start;
+    auto endTIMER = chrono::high_resolution_clock::now();
+    chrono::duration<double> diff = endTIMER - startTIMER;
 
-    cout << endl << ReversedOutput(dt) << endl;
-    cout << "Moonrise: " << Time(moonrise) << endl;
-    cout << "Culmination: " << Time(culmination) << endl;
-    cout << "Moonset: " << Time(moonset) << endl;
+    cout << endl;
+    cout << "Moonrise: " << moonrise << endl;
+    cout << "Culmination: " << culmination << endl;
+    cout << "Moonset: " << moonset << endl;
 
     cout << endl << "Execution time: " << diff.count() << " seconds" << std::endl;
 
