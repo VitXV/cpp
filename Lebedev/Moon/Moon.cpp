@@ -76,7 +76,7 @@ int main()
     {
         case 0:
         {
-            file >> skip >> compare1 >> skip >> skip >> skip >> skip >> skip >> skip;
+            file >> date >> compare1 >> skip >> skip >> skip >> skip >> skip >> skip;
             file >> skip >> compare2 >> skip >> skip >> skip >> skip >> skip >> skip;
 
             CompareResult = DateTime().IntToTime(compare2).TimeToSeconds() - DateTime().IntToTime(compare1).TimeToSeconds();
@@ -87,7 +87,7 @@ int main()
             for (char c; file.get(c) && c != '\n'; ); // пропуск первой строчки
 
             // Экспериментальным путём я выяснил, что в данном типе файла символов в каждой строке около 70. Иногда больше, но 70 - это самое минимальное количество
-            const int CHARS_PER_LINE = 70;
+            const int CHARS_PER_LINE = 70; // min
             /*
             int mn = 10000;
             int qwe = 0;
@@ -103,7 +103,7 @@ int main()
             cout << endl << mn;
             */
 
-            DateTime start(dt.getYear(), 1, 1);
+            DateTime start(DateTime().IntToDate(date)); // с какого дня начинается файл
             int howMuch = dt - start; // сколько дней мне нужно пропустить, чтобы перейти ближе к необходимому
             if (howMuch <= 0)
                 howMuch = 0;
@@ -111,11 +111,6 @@ int main()
 
             // Я хочу пропустить некоторое количество символов
             // (Кол-во_символов_в_строке * Кол-во_строк_в_одном_дне) * кол-во дней
-
-            //2017-й год проблемный, и я не понял почему
-            // поэтому пока что он не работает
-            if (dt.getYear() == 2017)
-                return 1;
 
             // примерно приземляемся куда надо
             unsigned long long int totalSkip = (unsigned long long int)CompareResult * howMuch * CHARS_PER_LINE;
@@ -137,7 +132,6 @@ int main()
                     file.seekg((totalSkip / 24) / howMuch, ios::cur);
                 for (char c; file.get(c) && c != '\n';);
             }
-
 
             //file >> date >> time >> skip >> skip >> El >> skip >> skip >> skip;
             //cout << endl <<  date << " " << time;
@@ -173,7 +167,7 @@ int main()
         }
         case 1:
         {
-            file >> skip >> compare1 >> skip >> skip >> skip >> skip >> skip;
+            file >> date >> compare1 >> skip >> skip >> skip >> skip >> skip;
             file >> skip >> compare2 >> skip >> skip >> skip >> skip >> skip;
 
             CompareResult = DateTime().IntToTime(compare2).TimeToSeconds() - DateTime().IntToTime(compare1).TimeToSeconds();
@@ -183,7 +177,7 @@ int main()
             file.seekg(0);
             for (char c; file.get(c) && c != '\n'; ); // пропуск первой строчки
 
-            const int CHARS_PER_LINE = 64;
+            const int CHARS_PER_LINE = 64; // min
             /*
             int mn = 10000;
             int qwe = 0;
@@ -199,7 +193,7 @@ int main()
             cout << endl << mn;
             */
 
-            DateTime start(dt.getYear(), 1, 1);
+            DateTime start(DateTime().IntToDate(date));
             int howMuch = dt - start - 1; // сколько дней мне нужно пропустить, чтобы перейти ближе к необходимому
             if (howMuch <= 0)
                 howMuch = 0;
@@ -254,6 +248,7 @@ int main()
             break;
         }
     }
+
     auto endTIMER = chrono::high_resolution_clock::now();
     chrono::duration<double> diff = endTIMER - startTIMER;
 
