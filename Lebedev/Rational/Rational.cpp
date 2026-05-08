@@ -111,3 +111,51 @@ ostream& operator << (ostream& out, const Rational& r)
 		out << r.num << "/" << r.den;
 	return out;
 }
+
+int Rational::Find_X0(int n)
+{
+	int a = 0;
+	for (int i = 1;; i++)
+	{
+		if (i > n/i)
+		{
+			a = i - 1;
+			break;
+		}
+	}
+	return a;
+}
+
+Rational Rational::SQRT()
+{
+	if (*this == 0)
+		return 0;
+	if (*this < 0)
+		throw Exception();
+
+	int An = Find_X0(num);
+	int Ad = Find_X0(den);
+
+	int Xn = An;
+	for (;;)
+	{
+		if (Xn > INT_MAX - (num / Xn))
+			break;
+		if ((Xn + (num / Xn)) / 2 >= Xn)
+			break;
+		Xn = (Xn + (num / Xn)) / 2;
+	}
+
+	int Xd = Ad;
+	for (;;)
+	{
+		if (Xd > INT_MAX - (den / Xd))
+			break;
+		if ((Xd + (den / Xd)) / 2 >= Xd)
+			break;
+		Xd = (Xd + (den / Xd)) / 2;
+	}
+
+	Rational R(Xn, Xd);
+	return R;
+}
