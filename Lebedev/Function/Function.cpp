@@ -27,6 +27,8 @@ double Hyperbola::min(double start, double end)
 		return start;
 	if (k > 0)
 		return end;
+	else
+		return 0;
 }
 double Hyperbola::max(double start, double end)
 {
@@ -42,6 +44,22 @@ double Hyperbola::max(double start, double end)
 		return end;
 	if (k > 0)
 		return start;
+	else
+		return 0;
+}
+
+double Hyperbola::integration(double x)
+{
+	if (x <= 0)
+		throw Exception();
+	return k * log(x);
+}
+
+double Hyperbola::differentiation(double x)
+{
+	if (x==0)
+		throw Exception();
+	return -k / (x*x);
 }
 
 Parabola::Parabola(double A, double B, double C)
@@ -131,6 +149,15 @@ double Parabola::max(double start, double end)
 	}
 }
 
+double Parabola::integration(double x)
+{
+	return a*x*x*x/3 + b*x*x/2 + c*x;
+}
+double Parabola::differentiation(double x)
+{
+	return 2*a*x + b;
+}
+
 double Exponent::value(double x)
 {
 	return exp(x);
@@ -149,3 +176,12 @@ double Exponent::max(double start, double end)
 	return end;
 }
 
+double Exponent::integration(double x)
+{
+	return exp(x);
+}
+
+double Exponent::differentiation(double x)
+{
+	return exp(x);
+}

@@ -18,6 +18,8 @@ public:
 	double value(double x);
 	double min(double start, double end);
 	double max(double start, double end);
+	double integration(double x);
+	double differentiation(double x);
 };
 
 class Parabola : public Function
@@ -28,6 +30,8 @@ public:
 	double value(double x);
 	double min(double start, double end);
 	double max(double start, double end);
+	double integration(double x);
+	double differentiation(double x);
 };
 
 class Exponent : public Function
@@ -36,4 +40,6 @@ public:
 	double value(double x);
 	double min(double start, double end);
 	double max(double start, double end);
+	double integration(double x);
+	double differentiation(double x);
 };
