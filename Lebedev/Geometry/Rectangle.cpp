@@ -2,7 +2,7 @@
 
 void Rectangle::isCorrect()
 {
-	return;
+	return; // Under contruction
 }
 
 void Rectangle::print_name()

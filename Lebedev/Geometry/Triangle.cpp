@@ -10,6 +10,7 @@ void Triangle::isCorrect()
 
 	// if points are on a line?
 	// need to check 
+	// Under Construction
 }
 
 void Triangle::print_name()

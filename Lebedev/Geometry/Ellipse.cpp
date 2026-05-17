@@ -2,7 +2,7 @@
 
 void Ellipse::isCorrect()
 {
-	return;
+	return; // Under contruction
 }
 
 void Ellipse::print_name()

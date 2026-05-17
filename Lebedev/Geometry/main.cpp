@@ -1,8 +1,33 @@
 #include "Geometry.h"
+#include <fstream>
 #include <iostream>
+#include <iomanip>
+
+using namespace std;
 
 int main()
 {
+	ifstream file("polygon.txt");
+	
+	int k;
+	file >> k;
+
+	double x, y;
+	Point* points = new Point[k];
+	for (int i = 0; i < k; i++)
+	{
+		file >> x >> y;
+		points[i].setX(x);
+		points[i].setY(y);
+	}
+
+	Polygon Field(k, points);
+	cout << "Area = " << setprecision(2) <<  fixed << Field.calc_area();
+
+
+	/*
+	// Testing classes
+
 	Point A(4, 3);
 	Point B(4, 0);
 	Point C(0, 3);
@@ -104,4 +129,8 @@ int main()
 	std::cout << "Area = " << POLYGON.calc_area() << std::endl;
 
 	std::cout << "Perimeter = " << POLYGON.calc_perimeter() << std::endl;
+
+	*/
+	
+	return 0;
 }

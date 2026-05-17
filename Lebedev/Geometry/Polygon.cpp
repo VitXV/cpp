@@ -2,7 +2,7 @@
 
 void Polygon::isCorrect()
 {
-	return;
+	return; // Under contruction
 }
 
 void Polygon::print_name()

@@ -27,6 +27,16 @@ double Point::getY()
 	return y;
 }
 
+void Point::setX(double X)
+{
+	x = X;
+}
+
+void Point::setY(double Y)
+{
+	y = Y;
+}
+
 bool Point::operator == (const Point& p) const
 {
 	return (x == p.x && y == p.y);

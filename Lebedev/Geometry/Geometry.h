@@ -8,15 +8,16 @@ class Exception {}; // Under contruction
 class Point
 {
 	double x, y;
-	Point(); // private! that's how it was intended
 public:
+	Point();
 	Point(double X, double Y);
 	double getX();
 	double getY();
+	void setX(double X);
+	void setY(double Y);
 
 	bool operator == (const Point& p) const;
 
-	friend class BoundingBox;
 	friend class Triangle;
 	friend class Rectangle;
 	friend class Circle;

@@ -2,7 +2,7 @@
 
 void Circle::isCorrect()
 {
-	return;
+	return; // Under contruction
 }
 
 void Circle::print_name()
