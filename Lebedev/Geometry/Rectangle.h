@@ -5,7 +5,7 @@ class Rectangle : public Figure
 {
 	Point pts[4];
 	BoundingBox bbox();
-	//isCorrect();
+	void isCorrect();
 public:
 	void print_name();
 	Rectangle(Point P1, Point P2, Point P3, Point P4); // Points

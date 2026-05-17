@@ -6,7 +6,7 @@ class Circle : public Figure
 	Point center;
 	double radius;
 	BoundingBox bbox();
-	//isCorrect();
+	void isCorrect();
 public:
 	void print_name();
 	Circle(Point CENTER, double RADIUS);   

@@ -1,5 +1,17 @@
 #include "Triangle.h"
 
+void Triangle::isCorrect()
+{
+	for (int i = 0; i < 3; i++)
+	{
+		if (pts[i] == pts[(i+1) % 3])
+			throw Exception();
+	}
+
+	// if points are on a line?
+	// need to check 
+}
+
 void Triangle::print_name()
 {
 	std::cout << "Triangle";
@@ -10,6 +22,7 @@ Triangle::Triangle(Point P1, Point P2, Point P3)
 	pts[0] = P1;
 	pts[1] = P2;
 	pts[2] = P3;
+	isCorrect();
 }
 
 Triangle::Triangle(double x1, double y1, double x2, double y2, double x3, double y3)
@@ -17,6 +30,7 @@ Triangle::Triangle(double x1, double y1, double x2, double y2, double x3, double
 	pts[0] = Point(x1, y1);
 	pts[1] = Point(x2, y2);
 	pts[2] = Point(x3, y3);
+	isCorrect();
 }
 
 Triangle::Triangle(double side1, double side2, double side3)
@@ -27,6 +41,7 @@ Triangle::Triangle(double side1, double side2, double side3)
 
 	pts[2].x = (pow(side2,2) + pow(side3,2) - pow(side1,2)) / (2*side3);
 	pts[2].y = sqrt( pow(side2,2) - pow(pts[2].x,2) );
+	isCorrect();
 }
 
 BoundingBox Triangle::bbox()

@@ -5,7 +5,7 @@ class Triangle : public Figure
 {
 	Point pts[3];
 	BoundingBox bbox();
-	//isCorrect();
+	void isCorrect();
 public:
 	void print_name();
 	Triangle(Point P1, Point P2, Point P3); // Points

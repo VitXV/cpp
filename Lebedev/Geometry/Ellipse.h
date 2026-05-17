@@ -6,7 +6,7 @@ class Ellipse : public Figure
 	Point center;
 	double a, b;
 	BoundingBox bbox();
-	//isCorrect();
+	void isCorrect();
 public:
 	void print_name();
 

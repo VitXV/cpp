@@ -1,5 +1,10 @@
 #include "Circle.h"
 
+void Circle::isCorrect()
+{
+	return;
+}
+
 void Circle::print_name()
 {
 	std::cout << "Circle";
@@ -9,12 +14,14 @@ Circle::Circle(Point CENTER, double RADIUS)
 {
 	center = CENTER;
 	radius = RADIUS;
+	void isCorrect();
 }
 
 Circle::Circle(double RADIUS)
 {
 	center = Point(RADIUS, RADIUS);
 	radius = RADIUS;
+	void isCorrect();
 }
 
 BoundingBox Circle::bbox()

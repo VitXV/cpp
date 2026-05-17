@@ -40,8 +40,8 @@ int main()
 
 	Point K(10, 10);
 	Point L(14, 10);
-	Point M(10, 15);
-	Point N(14, 15);
+	Point M(14, 15);
+	Point N(10, 15);
 
 	Rectangle KLMN(K, L, M, N);
 

@@ -14,6 +14,8 @@ public:
 	double getX();
 	double getY();
 
+	bool operator == (const Point& p) const;
+
 	friend class BoundingBox;
 	friend class Triangle;
 	friend class Rectangle;
@@ -36,6 +38,7 @@ public:
 class Figure
 {
 	virtual BoundingBox bbox() = 0;
+	virtual void isCorrect() = 0;
 public:
 	virtual void print_name() = 0;
 	

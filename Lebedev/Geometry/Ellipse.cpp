@@ -1,5 +1,10 @@
 #include "Ellipse.h"
 
+void Ellipse::isCorrect()
+{
+	return;
+}
+
 void Ellipse::print_name()
 {
 	std::cout << "Ellipse";

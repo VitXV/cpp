@@ -27,6 +27,11 @@ double Point::getY()
 	return y;
 }
 
+bool Point::operator == (const Point& p) const
+{
+	return (x == p.x && y == p.y);
+}
+
 BoundingBox::BoundingBox(Point MN, Point MX)
 {
 	mn = MN;

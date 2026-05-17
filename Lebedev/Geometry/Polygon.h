@@ -6,7 +6,8 @@ class Polygon : public Figure
 	int k;
 	Point* pts;
 	BoundingBox bbox();
-	//isCorrect(); // if pts[o] == pts[k] => delete last
+	void isCorrect();
+	// if pts[o] == pts[k] => delete last
 public:
 	void print_name();
 	

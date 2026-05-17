@@ -1,5 +1,10 @@
 #include "Rectangle.h"
 
+void Rectangle::isCorrect()
+{
+	return;
+}
+
 void Rectangle::print_name()
 {
 	std::cout << "Rectangle";
@@ -11,6 +16,7 @@ Rectangle::Rectangle(Point P1, Point P2, Point P3, Point P4)
 	pts[1] = P2;
 	pts[2] = P3;
 	pts[3] = P4;
+	isCorrect();
 }
 
 Rectangle::Rectangle(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4)
@@ -19,6 +25,7 @@ Rectangle::Rectangle(double x1, double y1, double x2, double y2, double x3, doub
 	pts[1] = Point(x2, y2);
 	pts[2] = Point(x3, y3);
 	pts[3] = Point(x4, y4);
+	isCorrect();
 }
 
 Rectangle::Rectangle(double side1, double side2)
@@ -27,6 +34,7 @@ Rectangle::Rectangle(double side1, double side2)
 	pts[1] = Point(side1, 0);
 	pts[2] = Point(side1, side2);
 	pts[3] = Point(0, side2);
+	isCorrect();
 }
 
 BoundingBox Rectangle::bbox()

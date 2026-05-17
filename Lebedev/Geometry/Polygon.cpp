@@ -1,5 +1,10 @@
 #include "Ellipse.h"
 
+void Polygon::isCorrect()
+{
+	return;
+}
+
 void Polygon::print_name()
 {
 	std::cout << "Polygon";
