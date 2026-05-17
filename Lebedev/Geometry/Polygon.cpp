@@ -1,4 +1,4 @@
-#include "Ellipse.h"
+#include "Polygon.h"
 
 void Polygon::isCorrect()
 {
