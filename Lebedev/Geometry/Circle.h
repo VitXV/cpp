@@ -9,7 +9,7 @@ class Circle : public Figure
 	//isCorrect();
 public:
 	void print_name();
-	Circle(Point CENTER, double RADIUS);
+	Circle(Point CENTER, double RADIUS);   
 	Circle(double RADIUS);
 
 	double calc_area();

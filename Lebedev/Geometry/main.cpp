@@ -75,4 +75,33 @@ int main()
 	std::cout << "Area = " << O1.calc_area() << std::endl;
 
 	std::cout << "Perimeter = " << O1.calc_perimeter() << std::endl;
+
+	Point c_e(5, 5);
+	Ellipse E(c_e, 5, 3);
+	std::cout << std::endl;
+	E.print_name();
+	std::cout << std::endl;
+
+	std::cout << "Area = " << E.calc_area() << std::endl;
+
+	std::cout << "Perimeter = " << E.calc_perimeter() << std::endl;
+
+	Point points1[] = { Point(1,2),
+					   Point(3,4),
+					   Point(6,4),
+					   Point(8,6),
+					   Point(10,6),
+					   Point(10,4),
+					   Point(8,2),
+					   Point(6,2),
+					   Point(5,1),
+					   Point(4,2) };
+	Polygon POLYGON(10, points1);
+	std::cout << std::endl;
+	POLYGON.print_name();
+	std::cout << std::endl;
+
+	std::cout << "Area = " << POLYGON.calc_area() << std::endl;
+
+	std::cout << "Perimeter = " << POLYGON.calc_perimeter() << std::endl;
 }

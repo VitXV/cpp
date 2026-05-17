@@ -18,6 +18,8 @@ public:
 	friend class Triangle;
 	friend class Rectangle;
 	friend class Circle;
+	friend class Ellipse;
+	friend class Polygon;
 };
 
 double distance(Point p1, Point p2);
@@ -29,7 +31,6 @@ public:
 	BoundingBox(Point mn, Point mx);
 	friend class Triangle;
 	friend class Rectangle;
-	friend class Circle;
 };
 
 class Figure
@@ -41,7 +42,9 @@ public:
 	virtual double calc_area() = 0;
 	virtual double calc_perimeter() = 0;
 };
-
+	
 #include "Triangle.h"
 #include "Rectangle.h"
 #include "Circle.h"
+#include "Ellipse.h"
+#include "Polygon.h"

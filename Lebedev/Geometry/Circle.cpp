@@ -17,7 +17,6 @@ Circle::Circle(double RADIUS)
 	radius = RADIUS;
 }
 
-
 BoundingBox Circle::bbox()
 {
 	Point MN(center.x - radius, center.y - radius);
